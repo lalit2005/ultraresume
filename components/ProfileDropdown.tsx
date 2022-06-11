@@ -14,18 +14,15 @@ import { Avatar, Text } from '@chakra-ui/react';
 import { useSession } from 'next-auth/react';
 
 const ProfileDropdown = () => {
-  const {
-    data: {
-      user: { name, image, email },
-    },
-  } = useSession();
+  const { data } = useSession();
+  const user = data?.user;
 
   return (
     <div>
       <Menu>
-        <Tooltip label={name}>
+        <Tooltip label={user?.name}>
           <MenuButton as='button'>
-            <Avatar size='sm' name={name} src={image} />
+            <Avatar size='sm' name={user?.name} src={user?.image} />
           </MenuButton>
         </Tooltip>
         <MenuList
@@ -34,9 +31,9 @@ const ProfileDropdown = () => {
           bg={useColorModeValue('white', 'gray.900')}>
           <MenuItem>
             <Box>
-              <Text>Signed in as {name}</Text>
+              <Text>Signed in as {user?.name}</Text>
               <Text opacity={0.8} fontSize='sm'>
-                {email}
+                {user?.email}
               </Text>
             </Box>
           </MenuItem>

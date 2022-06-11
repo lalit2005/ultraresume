@@ -12,7 +12,7 @@ import {
   Textarea,
   Button,
 } from '@chakra-ui/react';
-import { Resume } from '@prisma/client';
+import { Education, Experience, Resume } from '@prisma/client';
 import { useRouter } from 'next/router';
 import useSWR from 'swr';
 import {
@@ -28,14 +28,36 @@ import {
   FormErrorMessage,
   FormHelperText,
 } from '@chakra-ui/react';
-import { FaPlus } from 'react-icons/fa';
-import { HiPlus } from 'react-icons/hi';
+import { FaPlus, FaSave } from 'react-icons/fa';
+import { HiPlus, HiSave } from 'react-icons/hi';
+import { useState } from 'react';
+import Empty from '@/components/Empty';
+import { nanoid } from 'nanoid';
 
 const EditorPage = () => {
   const router = useRouter();
   const { data, mutate } = useSWR<Resume>(
     `/api/get/resume/?id=${router.query.id}`
   );
+
+  const { data: exp } = useSWR<Experience[]>(
+    `/api/get/experience/?resumeId=${router.query.id}`
+  );
+
+  const { data: edu } = useSWR<Education[]>(
+    `/api/get/education/?resumeId=${router.query.id}`
+  );
+
+  const [name, setName] = useState(data?.name);
+  const [email, setEmail] = useState(data?.email);
+  const [pic, setPic] = useState(data?.profile_pic);
+  const [loc, setLoc] = useState(data?.location);
+  const [about, setAbout] = useState(data?.about);
+  const [experiences, setExperiences] = useState(exp);
+  // const [socialLinks, setSocialLinks] = useState(data?.)
+  const [skillSet, setSkillSet] = useState(data?.skillSet);
+  const [educations, setEducations] = useState(edu);
+  const [footer, setFooter] = useState(data?.footer_text);
 
   return (
     <DashboardLayout>
@@ -48,12 +70,15 @@ const EditorPage = () => {
             <Box h='85vh' overflowY='scroll' w='full'>
               {data && (
                 <Default
-                  name={data?.name}
-                  email={data?.email}
-                  about={data?.description}
-                  location={data?.location}
-                  footerText={data?.footer_text}
-                  pfp={data?.profile_pic}
+                  name={name}
+                  email={email}
+                  about={about}
+                  location={loc}
+                  footerText={footer}
+                  pfp={pic}
+                  skills={skillSet}
+                  experiences={experiences}
+                  education={educations}
                 />
               )}
             </Box>
@@ -69,9 +94,17 @@ const EditorPage = () => {
             p='4'
             h='85vh'>
             <Text fontWeight='semibold'>Edit to see live updates</Text>
-            <Text mb='5' fontSize='sm' opacity={0.8}>
+            <Text mb='3' fontSize='sm' opacity={0.8}>
               Markdown is supported in all textareas!
             </Text>
+            <Button
+              onClick={() => {}}
+              mb='10'
+              colorScheme='blue'
+              leftIcon={<FaSave />}
+              size='sm'>
+              Save
+            </Button>
             <Accordion allowMultiple>
               <AccordionItem>
                 <h2>
@@ -88,15 +121,40 @@ const EditorPage = () => {
                       <VStack divider={<StackDivider />}>
                         <Box>
                           <FormLabel htmlFor='name'>Name</FormLabel>
-                          <Input id='name' type='text' />
+                          <Input
+                            defaultValue={name}
+                            onChange={(e) => setName(e.target.value)}
+                            id='name'
+                            type='text'
+                          />
                         </Box>
                         <Box>
                           <FormLabel htmlFor='email'>E-mail</FormLabel>
-                          <Input id='email' type='email' />
+                          <Input
+                            defaultValue={email}
+                            onChange={(e) => setEmail(e.target.value)}
+                            id='email'
+                            type='email'
+                          />
+                        </Box>
+                        <Box>
+                          <FormLabel htmlFor='loc'>Picture</FormLabel>
+                          <Input
+                            id='loc'
+                            defaultValue={pic}
+                            onChange={(e) => setPic(e.target.value)}
+                            type='text'
+                            placeholder='Image url for your profile pic'
+                          />
                         </Box>
                         <Box>
                           <FormLabel htmlFor='loc'>Location</FormLabel>
-                          <Input id='loc' type='text' />
+                          <Input
+                            id='loc'
+                            defaultValue={loc}
+                            onChange={(e) => setLoc(e.target.value)}
+                            type='text'
+                          />
                         </Box>
                       </VStack>
                     </FormControl>
@@ -116,6 +174,8 @@ const EditorPage = () => {
                 <AccordionPanel pb={4}>
                   <Textarea
                     rows={10}
+                    onChange={(e) => setAbout(e.target.value)}
+                    defaultValue={about}
                     placeholder='Write a para about yourself'
                   />
                 </AccordionPanel>
@@ -176,6 +236,8 @@ const EditorPage = () => {
                 <AccordionPanel pb={4}>
                   <Textarea
                     rows={5}
+                    defaultValue={skillSet}
+                    onChange={(e) => setSkillSet(e.target.value)}
                     placeholder='Comma separated list of all your skills. Eg. nextjs, tailwindcss, prisma, vercel, mysql'
                   />
                 </AccordionPanel>
@@ -192,19 +254,60 @@ const EditorPage = () => {
                 </h2>
                 <AccordionPanel pb={4}>
                   <VStack spacing='5'>
-                    <Box>
-                      <Input placeholder='Title' mb='1' />
-                      <Textarea placeholder='Description' />
-                    </Box>
-                    <Box>
-                      <Input placeholder='Title' mb='1' />
-                      <Textarea placeholder='Description' />
-                    </Box>
+                    {experiences && experiences?.length === 0 && (
+                      <>
+                        <Box my={3} textAlign='center'>
+                          <Empty minimizeFactor={6} />
+                        </Box>
+                        <Text fontSize='sm' textAlign='center'>
+                          You haven&apos;t added any experiences yet!
+                        </Text>
+                      </>
+                    )}
+                    {experiences &&
+                      experiences.length > 0 &&
+                      experiences.map((e) => (
+                        <Box key={e.id}>
+                          <Input
+                            onChange={(ev) => {
+                              const others = experiences.filter(
+                                (exp) => exp.id !== e.id
+                              );
+                              // @ts-ignore
+                              setExperiences([
+                                ...others,
+                                { ...e, title: ev.target.value },
+                              ]);
+                            }}
+                            placeholder='Title'
+                            mb='1'
+                          />
+                          <Textarea
+                            onChange={(ev) => {
+                              const others = experiences.filter(
+                                (exp) => exp.id !== e.id
+                              );
+                              // @ts-ignore
+                              setExperiences([
+                                ...others,
+                                { ...e, description: ev.target.value },
+                              ]);
+                            }}
+                            placeholder='Description'
+                          />
+                        </Box>
+                      ))}
                     <Box>
                       <Button
                         variant='solid'
                         leftIcon={<HiPlus />}
-                        color='blackAlpha'>
+                        color='blackAlpha'
+                        onClick={() => {
+                          setExperiences([
+                            ...experiences,
+                            { title: '', description: '', id: nanoid() },
+                          ]);
+                        }}>
                         Add new experience
                       </Button>
                     </Box>
@@ -223,20 +326,79 @@ const EditorPage = () => {
                 </h2>
                 <AccordionPanel pb={4}>
                   <VStack spacing='5'>
-                    <Box>
-                      <Input placeholder='Period. Eg. 2020-2022' mb='1' />
-                      <Input placeholder='Title' mb='1' />
-                      <Textarea placeholder='Description' />
-                    </Box>
-                    <Box>
-                      <Input placeholder='Period. Eg. 2020-2022' mb='1' />
-                      <Input placeholder='Title' mb='1' />
-                      <Textarea placeholder='Description' />
-                    </Box>
+                    {educations?.length === 0 && (
+                      <>
+                        <Box my={3} textAlign='center'>
+                          <Empty minimizeFactor={6} />
+                        </Box>
+                        <Text fontSize='sm' textAlign='center'>
+                          You haven&apos;t added anything related related to
+                          education yet!
+                        </Text>
+                      </>
+                    )}
+                    {educations &&
+                      educations.length > 0 &&
+                      educations.map((e) => (
+                        <Box key={e.id}>
+                          <Input
+                            onChange={(ev) => {
+                              const others = educations.filter(
+                                (exp) => exp.id !== e.id
+                              );
+                              // @ts-ignore
+                              setEducations([
+                                ...others,
+                                { ...e, title: ev.target.value },
+                              ]);
+                            }}
+                            placeholder='Title'
+                            mb='1'
+                          />
+                          <Input
+                            onChange={(ev) => {
+                              const others = educations.filter(
+                                (exp) => exp.id !== e.id
+                              );
+                              // @ts-ignore
+                              setEducations([
+                                ...others,
+                                { ...e, period: ev.target.value },
+                              ]);
+                            }}
+                            placeholder='Period. Eg. 2020-2022'
+                            mb='1'
+                          />
+                          <Textarea
+                            onChange={(ev) => {
+                              const others = educations.filter(
+                                (exp) => exp.id !== e.id
+                              );
+                              // @ts-ignore
+                              setEducations([
+                                ...others,
+                                { ...e, description: ev.target.value },
+                              ]);
+                            }}
+                            placeholder='Description'
+                          />
+                        </Box>
+                      ))}
                     <Box>
                       <Button
                         variant='solid'
                         leftIcon={<HiPlus />}
+                        onClick={() => {
+                          setEducations([
+                            ...educations,
+                            {
+                              title: '',
+                              period: '2018-2022',
+                              description: '',
+                              id: nanoid(),
+                            },
+                          ]);
+                        }}
                         color='blackAlpha'>
                         Add new
                       </Button>
@@ -257,6 +419,8 @@ const EditorPage = () => {
                 <AccordionPanel pb={4}>
                   <Textarea
                     rows={5}
+                    defaultValue={footer}
+                    onChange={(e) => setFooter(e.target.value)}
                     placeholder='Footer text. Appears at the end of resume'
                   />
                 </AccordionPanel>

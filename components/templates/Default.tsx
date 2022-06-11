@@ -11,13 +11,14 @@ import {
   Text,
   useColorModeValue,
 } from '@chakra-ui/react';
-import { useSession } from 'next-auth/react';
+import { Education, Experience } from '@prisma/client';
 import { FaGithub, FaLinkedin, FaTwitter } from 'react-icons/fa';
 import {
   HiOutlineGlobeAlt,
   HiOutlineLocationMarker,
   HiOutlineMail,
 } from 'react-icons/hi';
+import Markdown from '../Markdown';
 
 const Default: React.FC<{
   name: string;
@@ -26,49 +27,20 @@ const Default: React.FC<{
   email: string;
   about: string;
   footerText: string;
-}> = ({ name, location, about, email, footerText, pfp }) => {
-  const { data } = useSession();
-  const user = data?.user;
-
-  const skills = ['nextjs', 'tailwindcss', 'prisma', 'vercel'];
-  const experiences = [
-    {
-      title: 'Hello world',
-      description:
-        'Lorem ipsum dolor, sit amet consectetur adipisicing elit. Necessitatibus iure vel, laudantium doloribus molestias eaque aspernatur delectus impedit nobis debitis quod! Natus officiis, quidem ut, rem, magnam autem rerum accusantium nulla nisi omnis suscipit. Facilis aperiam pariatur soluta minus numquam, cumque, nulla veniam ab repellat, iure distinctio cupiditate alias? Esse!',
-    },
-    {
-      title: 'Hello world',
-      description:
-        'Lorem ipsum dolor, sit amet consectetur adipisicing elit. Necessitatibus iure vel, laudantium doloribus molestias eaque aspernatur delectus impedit nobis debitis quod! Natus officiis, quidem ut, rem, magnam autem rerum accusantium nulla nisi omnis suscipit. Facilis aperiam pariatur soluta minus numquam, cumque, nulla veniam ab repellat, iure distinctio cupiditate alias? Esse!',
-    },
-    {
-      title: 'Hello world',
-      description:
-        'Lorem ipsum dolor, sit amet consectetur adipisicing elit. Necessitatibus iure vel, laudantium doloribus molestias eaque aspernatur delectus impedit nobis debitis quod! Natus officiis, quidem ut, rem, magnam autem rerum accusantium nulla nisi omnis suscipit. Facilis aperiam pariatur soluta minus numquam, cumque, nulla veniam ab repellat, iure distinctio cupiditate alias? Esse!',
-    },
-    {
-      title: 'Hello world',
-      description:
-        'Lorem ipsum dolor, sit amet consectetur adipisicing elit. Necessitatibus iure vel, laudantium doloribus molestias eaque aspernatur delectus impedit nobis debitis quod! Natus officiis, quidem ut, rem, magnam autem rerum accusantium nulla nisi omnis suscipit. Facilis aperiam pariatur soluta minus numquam, cumque, nulla veniam ab repellat, iure distinctio cupiditate alias? Esse!',
-    },
-  ];
-
-  const edu = [
-    {
-      period: '2006-2015',
-      title: 'Schooling @ iNeuron',
-      description:
-        'Lorem ipsum dolor, sit amet consectetur adipisicing elit. Necessitatibus iure vel, laudantium doloribus molestias eaque aspernatur delectus impedit nobis debitis quod! Natus officiis, quidem ut, rem, magnam autem rerum accusantium nulla nisi omnis suscipit. Facilis aperiam pariatur soluta minus numquam, cumque, nulla veniam ab repellat, iure distinctio cupiditate alias? Esse!',
-    },
-    {
-      period: '2006-2015',
-      title: 'College @ IITM',
-      description:
-        'Lorem ipsum dolor, sit amet consectetur adipisicing elit. Necessitatibus iure vel, laudantium doloribus molestias eaque aspernatur delectus impedit nobis debitis quod! Natus officiis, quidem ut, rem, magnam autem rerum accusantium nulla nisi omnis suscipit. Facilis aperiam pariatur soluta minus numquam, cumque, nulla veniam ab repellat, iure distinctio cupiditate alias? Esse!',
-    },
-  ];
-
+  skills: string;
+  experiences: Experience[];
+  education: Education[];
+}> = ({
+  name,
+  location,
+  about,
+  email,
+  footerText,
+  pfp,
+  skills,
+  experiences,
+  education,
+}) => {
   return (
     <Box
       p='10'
@@ -76,9 +48,9 @@ const Default: React.FC<{
       border='1px'
       borderColor={useColorModeValue('gray.100', 'gray.600')}>
       {/* eslint-disable-next-line @next/next/no-img-element */}
-      <Image src={user?.image} alt='' rounded='full' />
+      <Image src={pfp} alt='' rounded='full' />
       <Heading as='h1' mt='10' mb='2' fontWeight='black'>
-        {'Lalit'}
+        {name}
       </Heading>
       <Text opacity={0.8}>{'Web developer who loves Jamstack'}</Text>
       <Box>
@@ -146,25 +118,12 @@ const Default: React.FC<{
         </Box>
         <Box mt='10'>
           <Subheading>ABOUT</Subheading>
-          <Text>
-            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Natus
-            eveniet perspiciatis unde aperiam similique placeat distinctio
-            dolores enim non laboriosam quis maiores illum reiciendis, repellat
-            soluta dolore aliquam odit obcaecati recusandae quod! Quae explicabo
-            illum voluptatem aperiam nulla, omnis ducimus iste placeat?
-            Accusamus labore debitis optio. Nisi recusandae eaque ea tempora, ab
-            suscipit quasi asperiores quaerat laborum! Omnis totam cupiditate
-            praesentium officia illo eos impedit labore voluptatem. Itaque
-            maiores magnam corporis asperiores rerum quisquam facilis optio
-            reiciendis soluta velit. Necessitatibus illum ex dolore itaque autem
-            voluptatum, et voluptatem ipsa earum atque, rem repudiandae. Modi
-            minus magnam ad perferendis totam fugiat?
-          </Text>
+          <Markdown text={about} />
         </Box>
       </Box>
       <Box mt='10'>
         <Subheading>SKILL SET</Subheading>
-        {skills.map((skill, index) => (
+        {skills?.split(',').map((skill, index) => (
           <Badge variant='subtle' colorScheme='blue' mr='2' key={index}>
             {skill}
           </Badge>
@@ -173,7 +132,7 @@ const Default: React.FC<{
       <Box mt='10'>
         <Subheading>EXPERIENCES</Subheading>
         <Box mt='5'>
-          {experiences.map((exp, index) => (
+          {experiences?.map((exp, index) => (
             <Box key={index} mb='4'>
               <Text fontWeight='semibold'>{exp.title}</Text>
               <Text opacity={0.8} mt='1'>
@@ -186,7 +145,7 @@ const Default: React.FC<{
       <Box mt='10'>
         <Subheading>EDUCATION</Subheading>
         <Box mt='5'>
-          {edu.map((e, index) => (
+          {education?.map((e, index) => (
             <Box key={index} mb='5'>
               <Grid templateColumns='repeat(12, 1fr)' gap={6}>
                 <GridItem colSpan={4}>
@@ -205,7 +164,7 @@ const Default: React.FC<{
       </Box>
       <Divider />
       <Box mt='10'>
-        <Text>{footerText}</Text>
+        <Markdown text={footerText} />
       </Box>
     </Box>
   );

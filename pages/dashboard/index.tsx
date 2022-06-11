@@ -101,12 +101,14 @@ const Dashboard = () => {
                     data?.map((resume) => {
                       router.prefetch(`/dashboard/${resume.id}`);
                       return (
+                        // eslint-disable-next-line react/jsx-key
                         <Tr
                           cursor='pointer'
                           onClick={() => {
                             router.push(`/dashboard/${resume.id}`);
                           }}
                           _hover={{
+                            // eslint-disable-next-line react-hooks/rules-of-hooks
                             bgColor: useColorModeValue('gray.100', 'gray.700'),
                           }}>
                           <Td>{resume.name}</Td>

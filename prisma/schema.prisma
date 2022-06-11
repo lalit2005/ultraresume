@@ -59,18 +59,22 @@ model VerificationToken {
 }
 
 model Resume {
-  id          String     @id @default(cuid())
-  createdAt   DateTime   @default(now())
-  updatedAt   DateTime   @updatedAt
+  id          String       @id @default(cuid())
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
   createdBy   String
   name        String
-  description String     @db.LongText
-  profile_pic String?    @db.LongText
-  footer_text String?    @db.LongText
-  location    String?    @db.LongText
+  email       String
+  description String       @db.LongText
+  profile_pic String?      @db.LongText
+  footer_text String?      @db.LongText
+  location    String?      @db.LongText
   template    String
+  inShowcase  Boolean      @default(false)
   projects    Project[]
   positions   Position[]
+  Experience  Experience[]
+  Education   Education[]
 }
 
 model Project {
@@ -87,5 +91,20 @@ model Position {
   id          String @id @default(cuid())
   title       String
   description String @db.LongText
+  resume      Resume @relation(fields: [id], references: [id], onDelete: Cascade)
+}
+
+model Experience {
+  id          String @id @default(cuid())
+  title       String
+  description String
+  resume      Resume @relation(fields: [id], references: [id], onDelete: Cascade)
+}
+
+model Education {
+  id          String @id @default(cuid())
+  period      String
+  title       String
+  description String
   resume      Resume @relation(fields: [id], references: [id], onDelete: Cascade)
 }

@@ -98,6 +98,7 @@ const Dashboard = () => {
                 </Thead>
                 <Tbody>
                   {data &&
+                    data.length > 0 &&
                     data?.map((resume) => {
                       router.prefetch(`/dashboard/${resume.id}/overview`);
                       return (
@@ -140,7 +141,7 @@ const Dashboard = () => {
                   .post('/api/create/resume', newData)
                   .then(({ data: newData }) => {
                     toast({
-                      title: 'Successfully created toast',
+                      title: 'Successfully created your resume, now edit it.',
                       position: 'top',
                     });
                     mutate([newData, ...data]);

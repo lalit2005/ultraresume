@@ -2,7 +2,6 @@ import {
   Badge,
   Box,
   Divider,
-  Flex,
   Grid,
   GridItem,
   Heading,
@@ -12,16 +11,21 @@ import {
   Text,
 } from '@chakra-ui/react';
 import { useSession } from 'next-auth/react';
-import { FaGithub, FaGlobe, FaLinkedin, FaTwitter } from 'react-icons/fa';
+import { FaGithub, FaLinkedin, FaTwitter } from 'react-icons/fa';
 import {
-  HiGlobe,
-  HiGlobeAlt,
   HiOutlineGlobeAlt,
   HiOutlineLocationMarker,
   HiOutlineMail,
 } from 'react-icons/hi';
 
-const Default = () => {
+const Default: React.FC<{
+  name: string;
+  location: string;
+  pfp: string;
+  email: string;
+  about: string;
+  footerText: string;
+}> = ({ name, location, about, email, footerText, pfp }) => {
   const { data } = useSession();
   const user = data?.user;
 
@@ -83,7 +87,7 @@ const Default = () => {
               mr='1'
               color='red.400'
             />
-            {'Bangalore, India'} &bull;{' '}
+            {location} &bull;{' '}
             <Icon
               as={HiOutlineMail}
               h={5}
@@ -92,7 +96,7 @@ const Default = () => {
               mr='1'
               color='chocolate'
             />
-            {'lalitvijay9480@gmail.com'}
+            {email}
           </Text>
         </Box>
         <Box mt='10'>
@@ -196,14 +200,7 @@ const Default = () => {
       </Box>
       <Divider />
       <Box mt='10'>
-        <Text>
-          Lorem ipsum dolor sit amet consectetur adipisicing elit. Vitae error
-          mollitia ea optio voluptates unde debitis nihil atque veniam
-          exercitationem doloremque velit dolorem excepturi facilis eaque qui,
-          accusamus minus quam repellendus, praesentium quisquam facere ex
-          ipsam. Non quas ullam dolore a. Dolorem id officiis eaque doloremque
-          tenetur animi optio minus.
-        </Text>
+        <Text>{footerText}</Text>
       </Box>
     </Box>
   );

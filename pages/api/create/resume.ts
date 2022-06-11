@@ -15,6 +15,8 @@ const handler = async (
       profile_pic: user.image,
       createdBy: user.id,
       template: 'default',
+      email: user.email,
+      location: 'India',
     },
   });
 

@@ -9,6 +9,7 @@ import {
   Image,
   SimpleGrid,
   Text,
+  useColorModeValue,
 } from '@chakra-ui/react';
 import { useSession } from 'next-auth/react';
 import { FaGithub, FaLinkedin, FaTwitter } from 'react-icons/fa';
@@ -69,7 +70,11 @@ const Default: React.FC<{
   ];
 
   return (
-    <Box p='10' rounded='lg'>
+    <Box
+      p='10'
+      rounded='lg'
+      border='1px'
+      borderColor={useColorModeValue('gray.100', 'gray.600')}>
       {/* eslint-disable-next-line @next/next/no-img-element */}
       <Image src={user?.image} alt='' rounded='full' />
       <Heading as='h1' mt='10' mb='2' fontWeight='black'>

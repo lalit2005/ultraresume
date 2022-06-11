@@ -1,7 +1,11 @@
 import { Box, Button, Flex, Text } from '@chakra-ui/react';
 import Link from 'next/link';
+import { useSession } from 'next-auth/react';
+import ProfileDropdown from './ProfileDropdown';
 
 const Nav = () => {
+  const { data, status } = useSession();
+
   return (
     <Flex as='nav' w='100vw' justifyContent='space-between' px='16' py='5'>
       <Box>
@@ -22,16 +26,22 @@ const Nav = () => {
             <a>Templates</a>
           </Link>
         </Text>
-        <Link passHref href='/login'>
-          <Button as='a' colorScheme='cyan' variant='outline' mx='3'>
-            Login
-          </Button>
-        </Link>
-        <Link passHref href='/signup'>
-          <Button as='a' colorScheme='blue' variant='solid' mx='3'>
-            <a>Sign up</a>
-          </Button>
-        </Link>
+        {status === 'authenticated' ? (
+          <ProfileDropdown />
+        ) : (
+          <>
+            <Link passHref href='/login'>
+              <Button as='a' colorScheme='cyan' variant='outline' mx='3'>
+                Login
+              </Button>
+            </Link>
+            <Link passHref href='/signup'>
+              <Button as='a' colorScheme='blue' variant='solid' mx='3'>
+                <a>Sign up</a>
+              </Button>
+            </Link>
+          </>
+        )}
       </Flex>
     </Flex>
   );

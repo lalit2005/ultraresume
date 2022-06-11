@@ -15,14 +15,7 @@ import {
   FlexProps,
   Heading,
 } from '@chakra-ui/react';
-import {
-  FiHome,
-  FiTrendingUp,
-  FiCompass,
-  FiStar,
-  FiSettings,
-  FiMenu,
-} from 'react-icons/fi';
+import { FiHome, FiSettings, FiMenu, FiGrid, FiShare2 } from 'react-icons/fi';
 import NextLink from 'next/link';
 import { IconType } from 'react-icons';
 import { ReactText } from 'react';
@@ -35,8 +28,8 @@ interface LinkItemProps {
 }
 const LinkItems: Array<LinkItemProps> = [
   { name: 'Overview', icon: FiHome },
-  { name: 'Editor', icon: FiCompass },
-  { name: 'Sharing', icon: FiTrendingUp },
+  { name: 'Editor', icon: FiGrid },
+  { name: 'Sharing', icon: FiShare2 },
   { name: 'Settings', icon: FiSettings },
 ];
 
@@ -81,7 +74,7 @@ export default function DashboardLayout({
           <p>{children}</p>
         </Box>
       </Box>
-      <DarkModeSwitch />
+      <DarkModeSwitch showPfp />
     </Box>
   );
 }

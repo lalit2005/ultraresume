@@ -99,13 +99,13 @@ const Dashboard = () => {
                 <Tbody>
                   {data &&
                     data?.map((resume) => {
-                      router.prefetch(`/dashboard/${resume.id}`);
+                      router.prefetch(`/dashboard/${resume.id}/overview`);
                       return (
                         // eslint-disable-next-line react/jsx-key
                         <Tr
                           cursor='pointer'
                           onClick={() => {
-                            router.push(`/dashboard/${resume.id}`);
+                            router.push(`/dashboard/${resume.id}/overview`);
                           }}
                           _hover={{
                             // eslint-disable-next-line react-hooks/rules-of-hooks

@@ -23,9 +23,11 @@ import {
   FiSettings,
   FiMenu,
 } from 'react-icons/fi';
+import NextLink from 'next/link';
 import { IconType } from 'react-icons';
 import { ReactText } from 'react';
 import { DarkModeSwitch } from '@/components/DarkModeSwitch';
+import { useRouter } from 'next/router';
 
 interface LinkItemProps {
   name: string;
@@ -44,10 +46,11 @@ export default function DashboardLayout({
   description,
 }: {
   children: ReactNode;
-  title: string;
-  description: string;
+  title?: string;
+  description?: string;
 }) {
   const { isOpen, onOpen, onClose } = useDisclosure();
+
   return (
     <Box minH='100vh'>
       <SidebarContent
@@ -72,8 +75,8 @@ export default function DashboardLayout({
         {children}
       </Box> */}
       <Box ml={['5', '20', '72']} pr='14' pt='20' px='14'>
-        <Heading fontWeight='black'>{title}</Heading>
-        <Text mt='5'>{description}</Text>
+        {title && <Heading fontWeight='black'>{title}</Heading>}
+        {description && <Text mt='5'>{description}</Text>}
         <Box mt='10'>
           <p>{children}</p>
         </Box>
@@ -88,6 +91,8 @@ interface SidebarProps extends BoxProps {
 }
 
 const SidebarContent = ({ onClose, ...rest }: SidebarProps) => {
+  const router = useRouter();
+  const id = router.query.id as string;
   return (
     <Box
       borderRight='1px'
@@ -105,8 +110,14 @@ const SidebarContent = ({ onClose, ...rest }: SidebarProps) => {
       </Flex>
       <Box>
         {LinkItems.map((link) => (
-          <NavItem key={link.name} icon={link.icon}>
-            {link.name}
+          <NavItem
+            key={link.name}
+            link={`/dashboard/${id}/${link.name.toLowerCase()}`}
+            icon={link.icon}>
+            {/* @ts-ignore */}
+            <NextLink href={`/dashboard/${id}/${link.name.toLowerCase()}`}>
+              <a>{link.name}</a>
+            </NextLink>
           </NavItem>
         ))}
       </Box>
@@ -116,31 +127,31 @@ const SidebarContent = ({ onClose, ...rest }: SidebarProps) => {
 
 interface NavItemProps extends FlexProps {
   icon: IconType;
+  link: string;
   children: ReactText;
 }
-const NavItem = ({ icon, children, ...rest }: NavItemProps) => {
+const NavItem = ({ icon, children, link, ...rest }: NavItemProps) => {
   return (
-    <Link
-      href='#'
-      style={{ textDecoration: 'none' }}
-      _focus={{ boxShadow: 'none' }}>
-      <Flex
-        align='center'
-        px='4'
-        py='1'
-        mt='2'
-        mx='4'
-        borderRadius='md'
-        role='group'
-        cursor='pointer'
-        _hover={{
-          bg: useColorModeValue('gray.100', 'gray.700'),
-        }}
-        {...rest}>
-        {icon && <Icon mr='4' fontSize='16' as={icon} />}
-        {children}
-      </Flex>
-    </Link>
+    <NextLink href={link} passHref>
+      <Link style={{ textDecoration: 'none' }} _focus={{ boxShadow: 'none' }}>
+        <Flex
+          align='center'
+          px='4'
+          py='1'
+          mt='2'
+          mx='4'
+          borderRadius='md'
+          role='group'
+          cursor='pointer'
+          _hover={{
+            bg: useColorModeValue('gray.100', 'gray.700'),
+          }}
+          {...rest}>
+          {icon && <Icon mr='4' fontSize='16' as={icon} />}
+          {children}
+        </Flex>
+      </Link>
+    </NextLink>
   );
 };
 

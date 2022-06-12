@@ -22,11 +22,11 @@ const handler = async (
       email: user.email,
       location: 'Bangalore, India',
       publicId: nanoid(5),
-      experience1Title: 'Software Engineer @ iNeuron',
-      experience1Description:
-        'Worked on a team of three, responsible for refactoring the API to be RESTful.Optimized SQL queries leading to a 15% reduction in p95 response times.',
-      education1Title: 'MSc in Computer Science',
-      education1Description: 'University of Mumbai',
+      // experience1Title: 'Software Engineer @ iNeuron',
+      // experience1Description:
+      //   'Worked on a team of three, responsible for refactoring the API to be RESTful.Optimized SQL queries leading to a 15% reduction in p95 response times.',
+      // education1Title: 'MSc in Computer Science',
+      // education1Description: 'University of Mumbai',
     },
   });
 

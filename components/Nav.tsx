@@ -16,16 +16,6 @@ const Nav = () => {
         </Link>
       </Box>
       <Flex justifyContent='space-between' alignItems='center'>
-        <Text mx='3'>
-          <Link href='/showcase'>
-            <a>Showcase</a>
-          </Link>
-        </Text>
-        <Text mx='3'>
-          <Link href='/templates'>
-            <a>Templates</a>
-          </Link>
-        </Text>
         {status === 'authenticated' ? (
           <ProfileDropdown />
         ) : (

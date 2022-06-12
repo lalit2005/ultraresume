@@ -30,6 +30,7 @@ const Default: React.FC<{
   skills: string;
   experiences: Experience[];
   education: Education[];
+  img?: boolean;
 }> = ({
   name,
   location,
@@ -40,6 +41,7 @@ const Default: React.FC<{
   skills,
   experiences,
   education,
+  img = true,
 }) => {
   return (
     <Box
@@ -48,7 +50,16 @@ const Default: React.FC<{
       border='1px'
       borderColor={useColorModeValue('gray.100', 'gray.600')}>
       {/* eslint-disable-next-line @next/next/no-img-element */}
-      <Image src={pfp} alt='' rounded='full' />
+      {img && (
+        <Image
+          shadow='lg'
+          src={pfp}
+          height={100}
+          w={100}
+          alt=''
+          rounded='full'
+        />
+      )}
       <Heading as='h1' mt='10' mb='2' fontWeight='black'>
         {name}
       </Heading>
@@ -176,8 +187,8 @@ const Subheading: React.FC = (props) => {
   return (
     <Heading
       // todo
-      bgGradient='linear(to-tr, #439cfb, #f187fb)'
-      bgClip='text'
+      as='h2'
+      opacity={0.9}
       fontWeight='extrabold'
       fontSize='xl'
       mb='2'>

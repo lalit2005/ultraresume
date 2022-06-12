@@ -1,6 +1,5 @@
 import requireSession from '@/lib/require-session';
 import { prisma } from '@/utils/prisma';
-import { nanoid } from 'nanoid';
 import type { NextApiRequest, NextApiResponse } from 'next';
 import { User } from 'types/types';
 
@@ -9,16 +8,29 @@ const handler = async (
   res: NextApiResponse,
   user: User
 ) => {
-  const resume = await prisma.resume.create({
+  const {
+    id,
+    name,
+    about,
+    email,
+    footer_text,
+    location,
+    profile_pic,
+    skillSet,
+  } = req.body;
+
+  const resume = await prisma.resume.update({
+    where: {
+      id,
+    },
     data: {
-      name: req.body.name,
-      description: req.body.description,
-      profile_pic: user.image,
-      createdBy: user.id,
-      template: 'default',
-      email: user.email,
-      location: 'India',
-      publicId: nanoid(5),
+      name,
+      about,
+      email,
+      footer_text,
+      location,
+      profile_pic,
+      skillSet,
     },
   });
 

@@ -11,6 +11,7 @@ import {
   StackDivider,
   Textarea,
   Button,
+  useToast,
 } from '@chakra-ui/react';
 import { Education, Experience, Resume } from '@prisma/client';
 import { useRouter } from 'next/router';
@@ -33,6 +34,7 @@ import { HiPlus, HiSave } from 'react-icons/hi';
 import { useState } from 'react';
 import Empty from '@/components/Empty';
 import { nanoid } from 'nanoid';
+import axios from 'axios';
 
 const EditorPage = () => {
   const router = useRouter();
@@ -58,6 +60,10 @@ const EditorPage = () => {
   const [skillSet, setSkillSet] = useState(data?.skillSet);
   const [educations, setEducations] = useState(edu);
   const [footer, setFooter] = useState(data?.footer_text);
+
+  const [isLoading, setIsLoading] = useState(false);
+
+  const toast = useToast();
 
   return (
     <DashboardLayout>
@@ -98,8 +104,26 @@ const EditorPage = () => {
               Markdown is supported in all textareas!
             </Text>
             <Button
-              onClick={() => {}}
+              onClick={() => {
+                setIsLoading(true);
+                axios
+                  .post(`/api/update/resume`, {
+                    id: data?.id,
+                    name,
+                    about,
+                    email,
+                    footer_text: footer,
+                    loc,
+                    profile_pic: pic,
+                    skillSet,
+                  })
+                  .then(({ data }: { data: Resume }) => {
+                    mutate(data);
+                    setIsLoading(false);
+                  });
+              }}
               mb='10'
+              isLoading={isLoading}
               colorScheme='blue'
               leftIcon={<FaSave />}
               size='sm'>
@@ -379,6 +403,11 @@ const EditorPage = () => {
                                 ...others,
                                 { ...e, description: ev.target.value },
                               ]);
+
+                              // axios.post(`/api/create/experiences`, {
+                              // 	id: data.id,
+
+                              // })
                             }}
                             placeholder='Description'
                           />

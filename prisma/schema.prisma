@@ -63,6 +63,7 @@ model Resume {
   createdAt   DateTime      @default(now())
   updatedAt   DateTime      @updatedAt
   createdBy   String
+  publicId    String        @unique
   name        String
   email       String
   skillSet    String?       @db.LongText

@@ -1,4 +1,5 @@
 import PrimaryLayout from '@/layouts/PrimaryLayout';
+import { RedirectToDashboard } from '@/lib/redirect';
 import { Box, Button, Heading, Text } from '@chakra-ui/react';
 import { signIn } from 'next-auth/react';
 import { FaGoogle } from 'react-icons/fa';
@@ -6,6 +7,7 @@ import { FaGoogle } from 'react-icons/fa';
 const SignupPage = () => {
   return (
     <PrimaryLayout>
+      <RedirectToDashboard />
       <Box mt='32' textAlign='center'>
         <Heading fontWeight='black' as='h1'>
           Welcome back 👋

@@ -2,10 +2,12 @@ import PrimaryLayout from '@/layouts/PrimaryLayout';
 import { Box, Button, Heading, Text } from '@chakra-ui/react';
 import { FaGoogle } from 'react-icons/fa';
 import { signIn } from 'next-auth/react';
+import { RedirectToDashboard } from '@/lib/redirect';
 
 const SignupPage = () => {
   return (
     <PrimaryLayout>
+      <RedirectToDashboard />
       <Box mt='32' textAlign='center'>
         <Heading fontWeight='black' as='h1'>
           Get started. <br />

@@ -54,10 +54,6 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
     where: {
       publicId: params.id as string,
     },
-    include: {
-      Education: true,
-      Experience: true,
-    },
   });
 
   console.log({ ...resume });

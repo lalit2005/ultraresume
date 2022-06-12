@@ -59,34 +59,43 @@ const Page: React.FC<InferGetStaticPropsType<typeof getStaticProps>> = (
           </Link>
         </ButtonGroup>
         <Box userSelect='none' className='resume'>
-          {(props.template === 'default' && (
+          {props.template === 'night-owl' ? (
+            <NightOwl
+              name={props.name}
+              email={props.email}
+              about={props.about}
+              location={props.loc}
+              footerText={props.footer}
+              pfp={props.pic}
+              skills={props.skillSet}
+              experience1Title={props.experience1Title}
+              experience2Title={props.experience2Title}
+              experience3Title={props.experience3Title}
+              experience1Description={props.experience1Description}
+              experience2Description={props.experience2Description}
+              experience3Description={props.experience3Description}
+              education1Title={props.education1Title}
+              education1Description={props.education1Description}
+            />
+          ) : (
             <Default
               name={props.name}
-              img={img}
-              about={props.about}
-              education={props.Education}
-              experiences={props.Experience}
-              footerText={props.footer_text}
               email={props.email}
-              pfp={props.profile_pic}
-              location={props.location}
+              about={props.about}
+              location={props.loc}
+              footerText={props.footer}
+              pfp={props.pic}
               skills={props.skillSet}
+              experience1Title={props.experience1Title}
+              experience2Title={props.experience2Title}
+              experience3Title={props.experience3Title}
+              experience1Description={props.experience1Description}
+              experience2Description={props.experience2Description}
+              experience3Description={props.experience3Description}
+              education1Title={props.education1Title}
+              education1Description={props.education1Description}
             />
-          )) ||
-            (props.template === 'night-owl' && (
-              <NightOwl
-                name={props.name}
-                img={img}
-                about={props.about}
-                education={props.Education}
-                experiences={props.Experience}
-                footerText={props.footer_text}
-                email={props.email}
-                pfp={props.profile_pic}
-                location={props.location}
-                skills={props.skillSet}
-              />
-            ))}
+          )}
         </Box>
       </Box>
     </div>
@@ -99,10 +108,6 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
   const resume = await prisma.resume.findUnique({
     where: {
       publicId: params.id as string,
-    },
-    include: {
-      Education: true,
-      Experience: true,
     },
   });
 

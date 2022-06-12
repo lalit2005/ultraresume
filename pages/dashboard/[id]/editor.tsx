@@ -13,6 +13,16 @@ import {
   Button,
   useToast,
 } from '@chakra-ui/react';
+import {
+  Menu,
+  MenuButton,
+  MenuList,
+  MenuItem,
+  MenuItemOption,
+  MenuGroup,
+  MenuOptionGroup,
+  MenuDivider,
+} from '@chakra-ui/react';
 import { Education, Experience, Resume } from '@prisma/client';
 import { useRouter } from 'next/router';
 import useSWR from 'swr';
@@ -30,11 +40,12 @@ import {
   FormHelperText,
 } from '@chakra-ui/react';
 import { FaPlus, FaSave } from 'react-icons/fa';
-import { HiPlus, HiSave } from 'react-icons/hi';
+import { HiChevronDown, HiPlus, HiSave } from 'react-icons/hi';
 import { useState } from 'react';
 import Empty from '@/components/Empty';
 import { nanoid } from 'nanoid';
 import axios from 'axios';
+import NightOwl from '@/components/templates/NightOwl';
 
 const EditorPage = () => {
   const router = useRouter();
@@ -55,13 +66,18 @@ const EditorPage = () => {
   const [pic, setPic] = useState(data?.profile_pic);
   const [loc, setLoc] = useState(data?.location);
   const [about, setAbout] = useState(data?.about);
-  const [experiences, setExperiences] = useState(exp);
+  const [experiences, setExperiences] = useState(exp || []);
   // const [socialLinks, setSocialLinks] = useState(data?.)
   const [skillSet, setSkillSet] = useState(data?.skillSet);
   const [educations, setEducations] = useState(edu);
   const [footer, setFooter] = useState(data?.footer_text);
-
+  const [template, setTemplate] = useState<'default' | 'night-owl'>(
+    // @ts-ignore
+    data?.template
+  );
   const [isLoading, setIsLoading] = useState(false);
+
+  const allThemes: typeof template[] = ['default', 'night-owl'];
 
   const toast = useToast();
 
@@ -74,8 +90,8 @@ const EditorPage = () => {
           gap={4}>
           <GridItem colSpan={8}>
             <Box h='85vh' overflowY='scroll' w='full'>
-              {data && (
-                <Default
+              {(data && template === 'night-owl' && (
+                <NightOwl
                   name={name}
                   email={email}
                   about={about}
@@ -86,7 +102,20 @@ const EditorPage = () => {
                   experiences={experiences}
                   education={educations}
                 />
-              )}
+              )) ||
+                (template === 'default' && (
+                  <Default
+                    name={name}
+                    email={email}
+                    about={about}
+                    location={loc}
+                    footerText={footer}
+                    pfp={pic}
+                    skills={skillSet}
+                    experiences={experiences}
+                    education={educations}
+                  />
+                ))}
             </Box>
           </GridItem>
           <GridItem
@@ -112,6 +141,7 @@ const EditorPage = () => {
                     name,
                     about,
                     email,
+                    template,
                     footer_text: footer,
                     loc,
                     profile_pic: pic,
@@ -130,6 +160,36 @@ const EditorPage = () => {
               Save
             </Button>
             <Accordion allowMultiple>
+              <AccordionItem>
+                <h2>
+                  <AccordionButton>
+                    <Box flex='1' textAlign='left'>
+                      Resume Theme
+                    </Box>
+                    <AccordionIcon />
+                  </AccordionButton>
+                </h2>
+                <AccordionPanel pb={4}>
+                  <Menu>
+                    <MenuButton>
+                      <Button
+                        colorScheme='twitter'
+                        size='sm'
+                        rightIcon={<HiChevronDown />}>
+                        {template}
+                      </Button>
+                    </MenuButton>
+                    <MenuList p={3}>
+                      {allThemes.map((t) => (
+                        <MenuItem onClick={() => setTemplate(t)} key={t}>
+                          {t}
+                        </MenuItem>
+                      ))}
+                    </MenuList>
+                  </Menu>
+                </AccordionPanel>
+              </AccordionItem>
+
               <AccordionItem>
                 <h2>
                   <AccordionButton>

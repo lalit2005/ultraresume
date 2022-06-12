@@ -6,6 +6,7 @@ import { FaFilePdf, FaQrcode } from 'react-icons/fa';
 import Script from 'next/script';
 import { useState } from 'react';
 import Link from 'next/link';
+import NightOwl from '@/components/templates/NightOwl';
 
 const Page: React.FC<InferGetStaticPropsType<typeof getStaticProps>> = (
   props
@@ -58,18 +59,34 @@ const Page: React.FC<InferGetStaticPropsType<typeof getStaticProps>> = (
           </Link>
         </ButtonGroup>
         <Box userSelect='none' className='resume'>
-          <Default
-            name={props.name}
-            img={img}
-            about={props.about}
-            education={props.Education}
-            experiences={props.Experience}
-            footerText={props.footer_text}
-            email={props.email}
-            pfp={props.profile_pic}
-            location={props.location}
-            skills={props.skillSet}
-          />
+          {(props.template === 'default' && (
+            <Default
+              name={props.name}
+              img={img}
+              about={props.about}
+              education={props.Education}
+              experiences={props.Experience}
+              footerText={props.footer_text}
+              email={props.email}
+              pfp={props.profile_pic}
+              location={props.location}
+              skills={props.skillSet}
+            />
+          )) ||
+            (props.template === 'night-owl' && (
+              <NightOwl
+                name={props.name}
+                img={img}
+                about={props.about}
+                education={props.Education}
+                experiences={props.Experience}
+                footerText={props.footer_text}
+                email={props.email}
+                pfp={props.profile_pic}
+                location={props.location}
+                skills={props.skillSet}
+              />
+            ))}
         </Box>
       </Box>
     </div>

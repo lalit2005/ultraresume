@@ -17,6 +17,7 @@ const handler = async (
     location,
     profile_pic,
     skillSet,
+    template,
   } = req.body;
 
   const resume = await prisma.resume.update({
@@ -26,6 +27,7 @@ const handler = async (
     data: {
       name,
       about,
+      template,
       email,
       footer_text,
       location,

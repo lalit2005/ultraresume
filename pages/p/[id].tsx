@@ -63,6 +63,7 @@ const Page: React.FC<InferGetStaticPropsType<typeof getStaticProps>> = (
             <NightOwl
               name={props.name}
               email={props.email}
+							socialLinks={props.socialLinks}
               about={props.about}
               location={props.loc}
               description={props.description}
@@ -82,6 +83,7 @@ const Page: React.FC<InferGetStaticPropsType<typeof getStaticProps>> = (
             <Default
               name={props.name}
               email={props.email}
+              socialLinks={props.socialLinks}
               about={props.about}
               location={props.loc}
               description={props.description}

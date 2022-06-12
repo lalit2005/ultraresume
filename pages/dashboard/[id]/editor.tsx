@@ -23,7 +23,7 @@ import {
   MenuOptionGroup,
   MenuDivider,
 } from '@chakra-ui/react';
-import { Resume, SocialLinks } from '@prisma/client';
+import { Resume } from '@prisma/client';
 import { useRouter } from 'next/router';
 import useSWR from 'swr';
 import {
@@ -50,21 +50,18 @@ import NightOwl from '@/components/templates/NightOwl';
 const EditorPage = () => {
   const router = useRouter();
 
-  const { data, mutate } = useSWR<
-    Resume & {
-      socialLinks: SocialLinks[];
-    }
-  >(`/api/get/resume/?id=${router.query.id}`);
+  const { data, mutate } = useSWR<Resume>(
+    `/api/get/resume/?id=${router.query.id}`
+  );
 
   const [name, setName] = useState(data?.name);
   const [email, setEmail] = useState(data?.email);
   const [pic, setPic] = useState(data?.profile_pic);
   const [loc, setLoc] = useState(data?.location);
   const [about, setAbout] = useState(data?.about);
-  // const [socialLinks, setSocialLinks] = useState(data?.)
   const [skillSet, setSkillSet] = useState(data?.skillSet);
   const [description, setDescription] = useState(data?.description);
-
+  const [socialLinks, setSocialLinks] = useState(data?.socialLinks);
   const [experience1Title, setExperience1Title] = useState(
     data?.experience1Title
   );
@@ -118,6 +115,7 @@ const EditorPage = () => {
                     location={loc}
                     footerText={footer}
                     pfp={pic}
+                    socialLinks={socialLinks}
                     description={description}
                     skills={skillSet}
                     experience1Title={experience1Title}
@@ -135,6 +133,7 @@ const EditorPage = () => {
                     email={email}
                     about={about}
                     location={loc}
+                    socialLinks={socialLinks}
                     footerText={footer}
                     pfp={pic}
                     description={description}
@@ -180,6 +179,7 @@ const EditorPage = () => {
                     loc,
                     profile_pic: pic,
                     skillSet,
+                    socialLinks,
                     experience1Title,
                     experience1Description,
                     experience2Title,
@@ -317,36 +317,12 @@ const EditorPage = () => {
                   </AccordionButton>
                 </h2>
                 <AccordionPanel pb={4}>
-                  <form>
-                    <FormControl>
-                      <VStack divider={<StackDivider />} spacing='3'>
-                        <Box>
-                          <FormLabel htmlFor='gh'>GitHub username</FormLabel>
-                          <Input id='gh' type='text' placeholder='@lalit2005' />
-                        </Box>
-                        <Box>
-                          <FormLabel htmlFor='gh'>LinkedIn username</FormLabel>
-                          <Input id='gh' type='text' placeholder='@lalit' />
-                        </Box>
-                        <Box>
-                          <FormLabel htmlFor='gh'>Twitter username</FormLabel>
-                          <Input
-                            id='gh'
-                            type='text'
-                            placeholder='@lalitcodes'
-                          />
-                        </Box>
-                        <Box>
-                          <FormLabel htmlFor='gh'>Personal website</FormLabel>
-                          <Input
-                            id='gh'
-                            type='text'
-                            placeholder='https://lalit.codes'
-                          />
-                        </Box>
-                      </VStack>
-                    </FormControl>
-                  </form>
+                  <Textarea
+                    rows={5}
+                    defaultValue={socialLinks}
+                    onChange={(e) => setSocialLinks(e.target.value)}
+                    placeholder='Comma separated list of all your social links. Eg. lalit.codes,github.com/lalit2005'
+                  />
                 </AccordionPanel>
               </AccordionItem>
 

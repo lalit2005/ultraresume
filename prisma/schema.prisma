@@ -59,34 +59,30 @@ model VerificationToken {
 }
 
 model Resume {
-  id                     String        @id @default(cuid())
-  createdAt              DateTime      @default(now())
-  updatedAt              DateTime      @updatedAt
-  createdBy              String
-  publicId               String        @unique
-  name                   String
-  email                  String
-  skillSet               String?       @db.LongText
-  about                  String?       @db.LongText
-  description            String        @db.LongText
-  profile_pic            String?       @db.LongText
-  footer_text            String?       @db.LongText
-  location               String?       @db.LongText
-  template               String
-  inShowcase             Boolean       @default(false)
-  socialLinks            SocialLinks[]
-  experience1Title       String?       @db.LongText
-  experience1Description String?       @db.LongText
-  experience2Title       String?       @db.LongText
-  experience2Description String?       @db.LongText
-  experience3Title       String?       @db.LongText
-  experience3Description String?       @db.LongText
-  education1Title        String?       @db.LongText
-  education1Description  String?       @db.LongText
-}
+  id          String   @id @default(cuid())
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  createdBy   String
+  publicId    String   @unique
+  name        String
+  email       String
+  skillSet    String?  @db.LongText
+  about       String?  @db.LongText
+  description String   @db.LongText
+  profile_pic String?  @db.LongText
+  footer_text String?  @db.LongText
+  location    String?  @db.LongText
+  template    String
+  inShowcase  Boolean  @default(false)
 
-model SocialLinks {
-  id     String @id @default(cuid())
-  text   String
-  resume Resume @relation(fields: [id], references: [id], onDelete: Cascade)
+  socialLinks String? @db.LongText
+
+  experience1Title       String? @db.LongText
+  experience1Description String? @db.LongText
+  experience2Title       String? @db.LongText
+  experience2Description String? @db.LongText
+  experience3Title       String? @db.LongText
+  experience3Description String? @db.LongText
+  education1Title        String? @db.LongText
+  education1Description  String? @db.LongText
 }

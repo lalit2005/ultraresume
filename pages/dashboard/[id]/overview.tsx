@@ -10,7 +10,7 @@ import {
   ListIcon,
 } from '@chakra-ui/react';
 import { MdCheckCircle } from 'react-icons/md';
-import { Resume, SocialLinks } from '@prisma/client';
+import { Resume } from '@prisma/client';
 import { formatRelative } from 'date-fns';
 import { useRouter } from 'next/router';
 import { FaDownload, FaEye } from 'react-icons/fa';

@@ -11,7 +11,7 @@ import {
   Text,
   useColorModeValue,
 } from '@chakra-ui/react';
-import { FaGithub, FaLinkedin, FaTwitter } from 'react-icons/fa';
+import { FaGithub, FaLink, FaLinkedin, FaTwitter } from 'react-icons/fa';
 import {
   HiOutlineGlobeAlt,
   HiOutlineLocationMarker,
@@ -29,6 +29,7 @@ const Default: React.FC<{
   description: string;
   skills: string;
   img?: boolean;
+  socialLinks: string;
   experience1Title: string;
   experience1Description: string;
   experience2Title: string;
@@ -46,6 +47,7 @@ const Default: React.FC<{
   description,
   pfp,
   skills,
+  socialLinks,
   experience1Title,
   experience1Description,
   experience2Title,
@@ -102,42 +104,11 @@ const Default: React.FC<{
         </Box>
         <Box mt='10'>
           <SimpleGrid columns={2} gap='3'>
-            <Box>
-              <Icon mb='-1' h={5} w={5} mr='1' as={FaGithub} /> @lalitcodes
-            </Box>
-            <Box>
-              <Icon
-                mb='-1'
-                h={5}
-                w={5}
-                mr='1'
-                as={FaLinkedin}
-                color='linkedin.400'
-              />{' '}
-              @lalit2005
-            </Box>
-            <Box>
-              <Icon
-                mb='-1'
-                h={5}
-                w={5}
-                mr='1'
-                as={FaTwitter}
-                color='twitter.500'
-              />{' '}
-              @lalitcodes
-            </Box>
-            <Box>
-              <Icon
-                mb='-1'
-                h={5}
-                w={5}
-                mr='1'
-                color='green.500'
-                as={HiOutlineGlobeAlt}
-              />{' '}
-              lalit.codes
-            </Box>
+            {socialLinks?.split(',').map((link) => (
+              <Box key={link}>
+                <Icon mb='-1' h={5} w={5} mr='1' as={FaLink} /> {link}
+              </Box>
+            ))}
           </SimpleGrid>
         </Box>
         <Box mt='10'>

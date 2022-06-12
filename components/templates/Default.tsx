@@ -26,6 +26,7 @@ const Default: React.FC<{
   email: string;
   about: string;
   footerText: string;
+  description: string;
   skills: string;
   img?: boolean;
   experience1Title: string;
@@ -42,6 +43,7 @@ const Default: React.FC<{
   about,
   email,
   footerText,
+  description,
   pfp,
   skills,
   experience1Title,
@@ -74,7 +76,7 @@ const Default: React.FC<{
       <Heading as='h1' mt='10' mb='2' fontWeight='black'>
         {name}
       </Heading>
-      <Text opacity={0.8}>{'Web developer who loves Jamstack'}</Text>
+      <Text opacity={0.8}>{description}</Text>
       <Box>
         <Box mt='5'>
           <Text display='inline-block'>

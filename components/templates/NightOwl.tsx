@@ -35,6 +35,7 @@ const NightOwl: React.FC<{
   about: string;
   footerText: string;
   skills: string;
+  description: string;
   img?: boolean;
   experience1Title: string;
   experience1Description: string;
@@ -50,6 +51,7 @@ const NightOwl: React.FC<{
   about,
   email,
   footerText,
+  description,
   pfp,
   skills,
   experience1Title,
@@ -86,7 +88,7 @@ const NightOwl: React.FC<{
           <Heading as='h1' fontWeight='black'>
             {name}
           </Heading>
-          <Text opacity={0.8}>{'Web developer who loves Jamstack'}</Text>
+          <Text opacity={0.8}>{description}</Text>
           <Box mt='1'>
             <Text display='inline-block'>
               <Icon

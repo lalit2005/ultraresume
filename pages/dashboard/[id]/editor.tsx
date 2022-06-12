@@ -63,6 +63,7 @@ const EditorPage = () => {
   const [about, setAbout] = useState(data?.about);
   // const [socialLinks, setSocialLinks] = useState(data?.)
   const [skillSet, setSkillSet] = useState(data?.skillSet);
+  const [description, setDescription] = useState(data?.description);
 
   const [experience1Title, setExperience1Title] = useState(
     data?.experience1Title
@@ -117,6 +118,7 @@ const EditorPage = () => {
                     location={loc}
                     footerText={footer}
                     pfp={pic}
+                    description={description}
                     skills={skillSet}
                     experience1Title={experience1Title}
                     experience2Title={experience2Title}
@@ -135,6 +137,7 @@ const EditorPage = () => {
                     location={loc}
                     footerText={footer}
                     pfp={pic}
+                    description={description}
                     skills={skillSet}
                     experience1Title={experience1Title}
                     experience2Title={experience2Title}

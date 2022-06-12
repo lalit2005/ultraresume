@@ -175,16 +175,12 @@ const Default: React.FC<{
       <Box mt='10'>
         <Subheading>EDUCATION</Subheading>
         <Box mb='5'>
-          <Grid templateColumns='repeat(12, 1fr)' gap={6}>
-            <GridItem colSpan={4}>
-              <Box>{education1Title}</Box>
-            </GridItem>
-            <GridItem colSpan={8}>
-              <Box>
-                <Text mt='2'>{education1Description}</Text>
-              </Box>
-            </GridItem>
-          </Grid>
+          <Box mb='4'>
+            <Text fontWeight='semibold'>{education1Title}</Text>
+            <Text opacity={0.8} mt='1'>
+              {education1Description}
+            </Text>
+          </Box>
         </Box>
       </Box>
       <Divider />

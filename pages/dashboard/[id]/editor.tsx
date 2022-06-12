@@ -377,7 +377,9 @@ const EditorPage = () => {
                         mb='1'
                       />
                       <Textarea
-                        onChange={(ev) => setExperience1Title(ev.target.value)}
+                        onChange={(ev) =>
+                          setExperience1Description(ev.target.value)
+                        }
                         defaultValue={experience1Description}
                         placeholder='Description'
                       />
@@ -390,7 +392,9 @@ const EditorPage = () => {
                         mb='1'
                       />
                       <Textarea
-                        onChange={(ev) => setExperience2Title(ev.target.value)}
+                        onChange={(ev) =>
+                          setExperience2Description(ev.target.value)
+                        }
                         defaultValue={experience2Description}
                         placeholder='Description'
                       />
@@ -403,7 +407,9 @@ const EditorPage = () => {
                         mb='1'
                       />
                       <Textarea
-                        onChange={(ev) => setExperience3Title(ev.target.value)}
+                        onChange={(ev) =>
+                          setExperience3Description(ev.target.value)
+                        }
                         defaultValue={experience3Description}
                         placeholder='Description'
                       />
@@ -426,7 +432,7 @@ const EditorPage = () => {
                     <Input
                       placeholder='Title'
                       mb='1'
-                      onChange={(e) => setEducation1Title}
+                      onChange={(e) => setEducation1Title(e.target.value)}
                       defaultValue={education1Title}
                     />
                     <Textarea

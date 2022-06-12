@@ -45,6 +45,7 @@ import axios from 'axios';
 import { formatRelative } from 'date-fns';
 import { usePrefetch } from 'use-link-prefetch';
 import { useRouter } from 'next/router';
+import Empty from '@/components/Empty';
 
 const Dashboard = () => {
   const { data, mutate } = useSWR<Resume[]>('/api/get/all-resumes');
@@ -97,6 +98,17 @@ const Dashboard = () => {
                   </Tr>
                 </Thead>
                 <Tbody>
+                  {data && data.length == 0 && (
+                    <>
+                      <Box mt='10'>
+                        <Empty minimizeFactor={5} />
+                      </Box>
+                      <Box>
+                        You haven&apos;t created any resumes yet! Create one
+                        from above button
+                      </Box>
+                    </>
+                  )}
                   {data &&
                     data.length > 0 &&
                     data?.map((resume) => {
@@ -139,10 +151,13 @@ const Dashboard = () => {
               onSubmit={handleSubmit((newData) => {
                 const req = axios
                   .post('/api/create/resume', newData)
-                  .then(({ data: newData }) => {
+                  .then(({ data: newData }: { data: Resume }) => {
+                    router.push(`/dashboard/${newData?.id}/overview`);
                     toast({
-                      title: 'Successfully created your resume, now edit it.',
-                      position: 'top',
+                      title: 'Your resume is created now 🎉',
+                      description:
+                        'You can just edit the pre generated resume according to your needs. You can choose a diff theme too!',
+                      status: 'success',
                     });
                     mutate([newData, ...data]);
                   });

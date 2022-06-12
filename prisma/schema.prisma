@@ -75,33 +75,15 @@ model Resume {
   template    String
   inShowcase  Boolean       @default(false)
   socialLinks SocialLinks[]
-  projects    Project[]
-  positions   Position[]
   Experience  Experience[]
   Education   Education[]
-}
-
-model Project {
-  id          String  @id @default(cuid())
-  name        String
-  description String
-  link        String
-  ghLink      String?
-  image       String
-  resume      Resume  @relation(fields: [id], references: [id], onDelete: Cascade)
-}
-
-model Position {
-  id          String @id @default(cuid())
-  title       String
-  description String @db.LongText
-  resume      Resume @relation(fields: [id], references: [id], onDelete: Cascade)
 }
 
 model Experience {
   id          String @id @default(cuid())
   title       String
-  description String
+  description String @db.LongText
+  period      String
   resume      Resume @relation(fields: [id], references: [id], onDelete: Cascade)
 }
 
@@ -109,13 +91,12 @@ model Education {
   id          String @id @default(cuid())
   period      String
   title       String
-  description String
+  description String @db.LongText
   resume      Resume @relation(fields: [id], references: [id], onDelete: Cascade)
 }
 
 model SocialLinks {
-  id          String @id @default(cuid())
-  text        String
-  description String @db.LongText
-  resume      Resume @relation(fields: [id], references: [id], onDelete: Cascade)
+  id     String @id @default(cuid())
+  text   String
+  resume Resume @relation(fields: [id], references: [id], onDelete: Cascade)
 }

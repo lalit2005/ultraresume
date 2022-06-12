@@ -11,7 +11,7 @@ import {
 import Link from 'next/link';
 
 import { Avatar, Text } from '@chakra-ui/react';
-import { useSession } from 'next-auth/react';
+import { signOut, useSession } from 'next-auth/react';
 
 const ProfileDropdown = () => {
   const { data } = useSession();
@@ -57,7 +57,10 @@ const ProfileDropdown = () => {
             </a>
           </MenuItem>
           <MenuDivider />
-          <MenuItem>
+          <MenuItem
+            onClick={() => {
+              signOut();
+            }}>
             <Text color='red'>Logout</Text>
           </MenuItem>
         </MenuList>

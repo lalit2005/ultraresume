@@ -18,6 +18,14 @@ const handler = async (
     profile_pic,
     skillSet,
     template,
+    experience1Title,
+    experience1Description,
+    experience2Title,
+    experience2Description,
+    experience3Title,
+    experience3Description,
+    education1Title,
+    education1Description,
   } = req.body;
 
   const resume = await prisma.resume.update({
@@ -33,6 +41,14 @@ const handler = async (
       location,
       profile_pic,
       skillSet,
+      experience1Title,
+      experience1Description,
+      experience2Title,
+      experience2Description,
+      experience3Title,
+      experience3Description,
+      education1Title,
+      education1Description,
     },
   });
 

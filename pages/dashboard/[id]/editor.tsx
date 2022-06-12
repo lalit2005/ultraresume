@@ -177,6 +177,14 @@ const EditorPage = () => {
                     loc,
                     profile_pic: pic,
                     skillSet,
+                    experience1Title,
+                    experience1Description,
+                    experience2Title,
+                    experience2Description,
+                    experience3Title,
+                    experience3Description,
+                    education1Title,
+                    education1Description,
                   })
                   .then(({ data: newData }: { data: Resume }) => {
                     mutate({ ...data, ...newData });

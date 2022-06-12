@@ -11,7 +11,6 @@ import {
   Text,
   useColorModeValue,
 } from '@chakra-ui/react';
-import { Education, Experience } from '@prisma/client';
 import { FaGithub, FaLinkedin, FaTwitter } from 'react-icons/fa';
 import {
   HiOutlineGlobeAlt,
@@ -28,9 +27,15 @@ const Default: React.FC<{
   about: string;
   footerText: string;
   skills: string;
-  experiences: Experience[];
-  education: Education[];
   img?: boolean;
+  experience1Title: string;
+  experience1Description: string;
+  experience2Title: string;
+  experience2Description: string;
+  experience3Title: string;
+  experience3Description: string;
+  education1Title: string;
+  education1Description: string;
 }> = ({
   name,
   location,
@@ -39,8 +44,14 @@ const Default: React.FC<{
   footerText,
   pfp,
   skills,
-  experiences,
-  education,
+  experience1Title,
+  experience1Description,
+  experience2Title,
+  experience2Description,
+  experience3Title,
+  experience3Description,
+  education1Title,
+  education1Description,
   img = true,
 }) => {
   return (
@@ -142,35 +153,38 @@ const Default: React.FC<{
       </Box>
       <Box mt='10'>
         <Subheading>EXPERIENCES</Subheading>
-        <Box mt='5'>
-          {experiences?.map((exp, index) => (
-            <Box key={index} mb='4'>
-              <Text fontWeight='semibold'>{exp.title}</Text>
-              <Text opacity={0.8} mt='1'>
-                {exp.description}
-              </Text>
-            </Box>
-          ))}
+        <Box mb='4'>
+          <Text fontWeight='semibold'>{experience1Title}</Text>
+          <Text opacity={0.8} mt='1'>
+            {experience1Description}
+          </Text>
+        </Box>
+        <Box mb='4'>
+          <Text fontWeight='semibold'>{experience2Title}</Text>
+          <Text opacity={0.8} mt='1'>
+            {experience2Description}
+          </Text>
+        </Box>
+        <Box mb='4'>
+          <Text fontWeight='semibold'>{experience3Title}</Text>
+          <Text opacity={0.8} mt='1'>
+            {experience3Description}
+          </Text>
         </Box>
       </Box>
       <Box mt='10'>
         <Subheading>EDUCATION</Subheading>
-        <Box mt='5'>
-          {education?.map((e, index) => (
-            <Box key={index} mb='5'>
-              <Grid templateColumns='repeat(12, 1fr)' gap={6}>
-                <GridItem colSpan={4}>
-                  <Box>{e.period}</Box>
-                </GridItem>
-                <GridItem colSpan={8}>
-                  <Box>
-                    <Text fontWeight='semibold'>{e.title}</Text>
-                    <Text mt='2'>{e.description}</Text>
-                  </Box>
-                </GridItem>
-              </Grid>
-            </Box>
-          ))}
+        <Box mb='5'>
+          <Grid templateColumns='repeat(12, 1fr)' gap={6}>
+            <GridItem colSpan={4}>
+              <Box>{education1Title}</Box>
+            </GridItem>
+            <GridItem colSpan={8}>
+              <Box>
+                <Text mt='2'>{education1Description}</Text>
+              </Box>
+            </GridItem>
+          </Grid>
         </Box>
       </Box>
       <Divider />

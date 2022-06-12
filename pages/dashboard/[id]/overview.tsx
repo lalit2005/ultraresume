@@ -10,7 +10,7 @@ import {
   ListIcon,
 } from '@chakra-ui/react';
 import { MdCheckCircle } from 'react-icons/md';
-import { Resume } from '@prisma/client';
+import { Resume, SocialLinks } from '@prisma/client';
 import { formatRelative } from 'date-fns';
 import { useRouter } from 'next/router';
 import { FaDownload, FaEye } from 'react-icons/fa';
@@ -22,7 +22,6 @@ const ResumePage = () => {
   const { data: resume } = useSWR<Resume>(
     `/api/get/resume/?id=${router.query.id}`
   );
-
   return (
     <DashboardLayout
       title={resume?.name || 'Loading...'}

@@ -23,7 +23,7 @@ import {
   MenuOptionGroup,
   MenuDivider,
 } from '@chakra-ui/react';
-import { Education, Experience, Resume } from '@prisma/client';
+import { Resume, SocialLinks } from '@prisma/client';
 import { useRouter } from 'next/router';
 import useSWR from 'swr';
 import {
@@ -49,27 +49,45 @@ import NightOwl from '@/components/templates/NightOwl';
 
 const EditorPage = () => {
   const router = useRouter();
-  const { data, mutate } = useSWR<Resume>(
-    `/api/get/resume/?id=${router.query.id}`
-  );
 
-  const { data: exp } = useSWR<Experience[]>(
-    `/api/get/experience/?resumeId=${router.query.id}`
-  );
-
-  const { data: edu } = useSWR<Education[]>(
-    `/api/get/education/?resumeId=${router.query.id}`
-  );
+  const { data, mutate } = useSWR<
+    Resume & {
+      socialLinks: SocialLinks[];
+    }
+  >(`/api/get/resume/?id=${router.query.id}`);
 
   const [name, setName] = useState(data?.name);
   const [email, setEmail] = useState(data?.email);
   const [pic, setPic] = useState(data?.profile_pic);
   const [loc, setLoc] = useState(data?.location);
   const [about, setAbout] = useState(data?.about);
-  const [experiences, setExperiences] = useState(exp || []);
   // const [socialLinks, setSocialLinks] = useState(data?.)
   const [skillSet, setSkillSet] = useState(data?.skillSet);
-  const [educations, setEducations] = useState(edu);
+
+  const [experience1Title, setExperience1Title] = useState(
+    data?.experience1Title
+  );
+  const [experience1Description, setExperience1Description] = useState(
+    data?.experience1Description
+  );
+  const [experience2Title, setExperience2Title] = useState(
+    data?.experience2Title
+  );
+  const [experience2Description, setExperience2Description] = useState(
+    data?.experience2Description
+  );
+  const [experience3Title, setExperience3Title] = useState(
+    data?.experience3Title
+  );
+  const [experience3Description, setExperience3Description] = useState(
+    data?.experience3Description
+  );
+
+  const [education1Title, setEducation1Title] = useState(data?.education1Title);
+  const [education1Description, setEducation1Description] = useState(
+    data?.education1Description
+  );
+
   const [footer, setFooter] = useState(data?.footer_text);
   const [template, setTemplate] = useState<'default' | 'night-owl'>(
     // @ts-ignore
@@ -90,20 +108,26 @@ const EditorPage = () => {
           gap={4}>
           <GridItem colSpan={8}>
             <Box h='85vh' overflowY='scroll' w='full'>
-              {(data && template === 'night-owl' && (
-                <NightOwl
-                  name={name}
-                  email={email}
-                  about={about}
-                  location={loc}
-                  footerText={footer}
-                  pfp={pic}
-                  skills={skillSet}
-                  experiences={experiences}
-                  education={educations}
-                />
-              )) ||
-                (template === 'default' && (
+              {data &&
+                (template === 'night-owl' ? (
+                  <NightOwl
+                    name={name}
+                    email={email}
+                    about={about}
+                    location={loc}
+                    footerText={footer}
+                    pfp={pic}
+                    skills={skillSet}
+                    experience1Title={experience1Title}
+                    experience2Title={experience2Title}
+                    experience3Title={experience3Title}
+                    experience1Description={experience1Description}
+                    experience2Description={experience2Description}
+                    experience3Description={experience3Description}
+                    education1Title={education1Title}
+                    education1Description={education1Description}
+                  />
+                ) : (
                   <Default
                     name={name}
                     email={email}
@@ -112,8 +136,14 @@ const EditorPage = () => {
                     footerText={footer}
                     pfp={pic}
                     skills={skillSet}
-                    experiences={experiences}
-                    education={educations}
+                    experience1Title={experience1Title}
+                    experience2Title={experience2Title}
+                    experience3Title={experience3Title}
+                    experience1Description={experience1Description}
+                    experience2Description={experience2Description}
+                    experience3Description={experience3Description}
+                    education1Title={education1Title}
+                    education1Description={education1Description}
                   />
                 ))}
             </Box>
@@ -121,6 +151,7 @@ const EditorPage = () => {
           <GridItem
             overflowY='scroll'
             colSpan={4}
+            // eslint-disable-next-line react-hooks/rules-of-hooks
             bg={useColorModeValue('gray.100', 'gray.900')}
             shadow='lg'
             borderRadius='md'
@@ -147,8 +178,8 @@ const EditorPage = () => {
                     profile_pic: pic,
                     skillSet,
                   })
-                  .then(({ data }: { data: Resume }) => {
-                    mutate(data);
+                  .then(({ data: newData }: { data: Resume }) => {
+                    mutate({ ...data, ...newData });
                     setIsLoading(false);
                   });
               }}
@@ -338,62 +369,44 @@ const EditorPage = () => {
                 </h2>
                 <AccordionPanel pb={4}>
                   <VStack spacing='5'>
-                    {experiences && experiences?.length === 0 && (
-                      <>
-                        <Box my={3} textAlign='center'>
-                          <Empty minimizeFactor={6} />
-                        </Box>
-                        <Text fontSize='sm' textAlign='center'>
-                          You haven&apos;t added any experiences yet!
-                        </Text>
-                      </>
-                    )}
-                    {experiences &&
-                      experiences.length > 0 &&
-                      experiences.map((e) => (
-                        <Box key={e.id}>
-                          <Input
-                            onChange={(ev) => {
-                              const others = experiences.filter(
-                                (exp) => exp.id !== e.id
-                              );
-                              // @ts-ignore
-                              setExperiences([
-                                ...others,
-                                { ...e, title: ev.target.value },
-                              ]);
-                            }}
-                            placeholder='Title'
-                            mb='1'
-                          />
-                          <Textarea
-                            onChange={(ev) => {
-                              const others = experiences.filter(
-                                (exp) => exp.id !== e.id
-                              );
-                              // @ts-ignore
-                              setExperiences([
-                                ...others,
-                                { ...e, description: ev.target.value },
-                              ]);
-                            }}
-                            placeholder='Description'
-                          />
-                        </Box>
-                      ))}
                     <Box>
-                      <Button
-                        variant='solid'
-                        leftIcon={<HiPlus />}
-                        color='blackAlpha'
-                        onClick={() => {
-                          setExperiences([
-                            ...experiences,
-                            { title: '', description: '', id: nanoid() },
-                          ]);
-                        }}>
-                        Add new experience
-                      </Button>
+                      <Input
+                        onChange={(ev) => setExperience1Title(ev.target.value)}
+                        defaultValue={experience1Title}
+                        placeholder='Title'
+                        mb='1'
+                      />
+                      <Textarea
+                        onChange={(ev) => setExperience1Title(ev.target.value)}
+                        defaultValue={experience1Description}
+                        placeholder='Description'
+                      />
+                    </Box>
+                    <Box>
+                      <Input
+                        onChange={(ev) => setExperience2Title(ev.target.value)}
+                        defaultValue={experience2Title}
+                        placeholder='Title'
+                        mb='1'
+                      />
+                      <Textarea
+                        onChange={(ev) => setExperience2Title(ev.target.value)}
+                        defaultValue={experience2Description}
+                        placeholder='Description'
+                      />
+                    </Box>
+                    <Box>
+                      <Input
+                        onChange={(ev) => setExperience3Title(ev.target.value)}
+                        defaultValue={experience3Title}
+                        placeholder='Title'
+                        mb='1'
+                      />
+                      <Textarea
+                        onChange={(ev) => setExperience3Title(ev.target.value)}
+                        defaultValue={experience3Description}
+                        placeholder='Description'
+                      />
                     </Box>
                   </VStack>
                 </AccordionPanel>
@@ -409,90 +422,19 @@ const EditorPage = () => {
                   </AccordionButton>
                 </h2>
                 <AccordionPanel pb={4}>
-                  <VStack spacing='5'>
-                    {educations?.length === 0 && (
-                      <>
-                        <Box my={3} textAlign='center'>
-                          <Empty minimizeFactor={6} />
-                        </Box>
-                        <Text fontSize='sm' textAlign='center'>
-                          You haven&apos;t added anything related related to
-                          education yet!
-                        </Text>
-                      </>
-                    )}
-                    {educations &&
-                      educations.length > 0 &&
-                      educations.map((e) => (
-                        <Box key={e.id}>
-                          <Input
-                            onChange={(ev) => {
-                              const others = educations.filter(
-                                (exp) => exp.id !== e.id
-                              );
-                              // @ts-ignore
-                              setEducations([
-                                ...others,
-                                { ...e, title: ev.target.value },
-                              ]);
-                            }}
-                            placeholder='Title'
-                            mb='1'
-                          />
-                          <Input
-                            onChange={(ev) => {
-                              const others = educations.filter(
-                                (exp) => exp.id !== e.id
-                              );
-                              // @ts-ignore
-                              setEducations([
-                                ...others,
-                                { ...e, period: ev.target.value },
-                              ]);
-                            }}
-                            placeholder='Period. Eg. 2020-2022'
-                            mb='1'
-                          />
-                          <Textarea
-                            onChange={(ev) => {
-                              const others = educations.filter(
-                                (exp) => exp.id !== e.id
-                              );
-                              // @ts-ignore
-                              setEducations([
-                                ...others,
-                                { ...e, description: ev.target.value },
-                              ]);
-
-                              // axios.post(`/api/create/experiences`, {
-                              // 	id: data.id,
-
-                              // })
-                            }}
-                            placeholder='Description'
-                          />
-                        </Box>
-                      ))}
-                    <Box>
-                      <Button
-                        variant='solid'
-                        leftIcon={<HiPlus />}
-                        onClick={() => {
-                          setEducations([
-                            ...educations,
-                            {
-                              title: '',
-                              period: '2018-2022',
-                              description: '',
-                              id: nanoid(),
-                            },
-                          ]);
-                        }}
-                        color='blackAlpha'>
-                        Add new
-                      </Button>
-                    </Box>
-                  </VStack>
+                  <Box>
+                    <Input
+                      placeholder='Title'
+                      mb='1'
+                      onChange={(e) => setEducation1Title}
+                      defaultValue={education1Title}
+                    />
+                    <Textarea
+                      placeholder='Description'
+                      onChange={(e) => setEducation1Description(e.target.value)}
+                      defaultValue={education1Description}
+                    />
+                  </Box>
                 </AccordionPanel>
               </AccordionItem>
 

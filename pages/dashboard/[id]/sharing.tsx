@@ -49,7 +49,7 @@ const Sharing = () => {
           cursor='pointer'
           onClick={async () => {
             await window.navigator.clipboard.writeText(
-              `https://ultraresume.vercel.app/${data?.publicId}`
+              `https://ultraresume.vercel.app/p/${data?.publicId}`
             );
             toast({
               title: 'Successfully copied URL to clipboard',
